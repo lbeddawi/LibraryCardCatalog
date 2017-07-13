@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization;
 
 namespace LibraryCardCatalog
 {
@@ -15,9 +17,9 @@ namespace LibraryCardCatalog
         {
 
         }
-        public void ListBooks(List<Book> bookList)
+        public void ListBooks()
         {
-           foreach(Book b in bookList)
+           foreach(Book b in Books)
             {
                 Console.WriteLine("{0} - {1}", b.Author, b.Title);
             }

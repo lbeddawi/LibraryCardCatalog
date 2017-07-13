@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization;
 
 namespace LibraryCardCatalog
 {
@@ -18,6 +20,10 @@ namespace LibraryCardCatalog
             get;
             set;
         }
-       
+        public Book(string author, string title)
+        {
+            this.Title = title;
+            this.Author = author;
+        }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization;
 
 namespace LibraryCardCatalog
 {
@@ -14,6 +16,7 @@ namespace LibraryCardCatalog
             Console.WriteLine("Please enter a file name");
             
             string FileName = Console.ReadLine();
+            CardCatalog c = new CardCatalog(FileName);
 
 
             // make sure to add a defensive mechanism against the entry of the user
@@ -29,7 +32,17 @@ namespace LibraryCardCatalog
             {
                 if(Choice==1)
                 {
-                    
+                    c.ListBooks();
+
+                }
+                else if(Choice==2)
+                {
+                    Console.WriteLine("Please enter an author");
+                    string UserAuthor = Console.ReadLine();
+                    Console.WriteLine("Please enter an title");
+                    string UserTitle = Console.ReadLine();
+                    Book NewBook = new Book(UserAuthor, UserTitle);
+                    c.AddBook(NewBook);
                 }
 
             }
