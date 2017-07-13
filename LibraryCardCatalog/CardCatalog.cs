@@ -11,7 +11,7 @@ namespace LibraryCardCatalog
     public class CardCatalog
     {
         private string _fileName;
-        private List<Book> Books;
+        private List<Book> Books = new List<Book>();
         
         public CardCatalog(string fileName)
         {

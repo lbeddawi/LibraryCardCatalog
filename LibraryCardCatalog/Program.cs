@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace LibraryCardCatalog
 {
@@ -12,11 +13,16 @@ namespace LibraryCardCatalog
     {
         static void Main(string[] args)
         {
-            
+           
             Console.WriteLine("Please enter a file name");
             
             string FileName = Console.ReadLine();
             CardCatalog c = new CardCatalog(FileName);
+            if (File.Exists(FileName))
+            {
+                //open and deserialize file
+            }
+            
 
 
             // make sure to add a defensive mechanism against the entry of the user
@@ -59,6 +65,13 @@ namespace LibraryCardCatalog
             Console.WriteLine("2. Add a book");
             Console.WriteLine("3. Save and exit");
         }
-
+        public static void WriteXML(string path, CardCatalog c)
+        {
+            
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(CardCatalog));
+            System.IO.FileStream file = System.IO.File.Create(path);
+            writer.Serialize(file, c);
+            file.Close();
+        }
     }
 }
