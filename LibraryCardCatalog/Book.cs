@@ -18,10 +18,6 @@ namespace LibraryCardCatalog
             get;
             set;
         }
-        public string Title
-        {
-            get;
-            set;
-        }
+       
     }
 }
