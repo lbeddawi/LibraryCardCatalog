@@ -9,19 +9,23 @@ namespace LibraryCardCatalog
     public class CardCatalog
     {
         private string _fileName;
-        private Book[] books;
+        private List<Book> Books;
+        
         public CardCatalog(string fileName)
         {
 
         }
-        public void ListBooks(Book[] bookArray)
+        public void ListBooks(List<Book> bookList)
         {
-           
+           foreach(Book b in bookList)
+            {
+                Console.WriteLine("{0} - {1}", b.Author, b.Title);
+            }
         }
 
         public void AddBook (Book b)
         {
-
+            Books.Add(b);
         }
 
         public void Save ()
