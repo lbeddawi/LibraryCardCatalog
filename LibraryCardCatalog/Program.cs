@@ -13,8 +13,9 @@ namespace LibraryCardCatalog
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Welcome to the Library Card Catalog!");
             // Prompt user for filename
-            Console.WriteLine("Please enter a file name");
+            Console.WriteLine("Please enter a new or existing file name:");
             string FileName = Console.ReadLine();
 
             // if FileName exists, we must De-Serialize it

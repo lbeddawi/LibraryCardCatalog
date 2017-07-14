@@ -24,13 +24,24 @@ namespace LibraryCardCatalog
         /// </summary>
         public void ListBooks()
         {
-            //// clear console
+            // clear console
             Console.Clear();
-           Console.WriteLine("Here are all the books in this library catalog:");
-           Console.WriteLine("---------------------------------------------");
-           foreach(Book b in Books)
+
+            if (Books.Count == 0)
             {
-                Console.WriteLine("{1}\t{0}", b.Author, b.Title);
+                Console.WriteLine("There are no books in this catalog.\n" +
+                                  "Please add some books!");
+            }
+            else
+            {
+                Console.WriteLine("You have {0} books in this library catalog:",
+                                  Books.Count());
+				Console.WriteLine("------------------------------------------");
+				foreach (Book b in Books)
+				{
+					Console.WriteLine("Author: {0}\n" +
+                                      "Title: {1}\n", b.Author, b.Title);
+				}
             }
 
             PauseMessage();
@@ -42,7 +53,8 @@ namespace LibraryCardCatalog
         public void AddBook (Book b)
         {
             Books.Add(b);
-            Console.WriteLine("\nAdded {0} by {1} to the catalog!\n",b.Title,b.Author);
+            Console.WriteLine("\nAdded {0} by {1} to the catalog!\n",
+                              b.Title,b.Author);
 
             PauseMessage();
         }
