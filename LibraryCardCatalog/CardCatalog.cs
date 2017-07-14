@@ -15,7 +15,7 @@ namespace LibraryCardCatalog
         
         public CardCatalog(string fileName)
         {
-
+            this._fileName = fileName;
         }
         public void ListBooks()
         {
@@ -32,7 +32,7 @@ namespace LibraryCardCatalog
 
         public void Save ()
         {
-
+            Program.WriteXML(_fileName,this.Books);
         }
     }
 }
