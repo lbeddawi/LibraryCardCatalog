@@ -9,55 +9,96 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace LibraryCardCatalog
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-           
+            // Prompt user for filename
             Console.WriteLine("Please enter a file name");
-            
             string FileName = Console.ReadLine();
+
+            // initialize new CardCatalog using user's input
             CardCatalog c = new CardCatalog(FileName);
-            if (File.Exists(FileName))
+
+            // display menu and process user input
+            int userSelection = GetValidUserInput();
+
+
+
+            while (userSelection != 3)
             {
-                //open and deserialize file
+				if (userSelection == 1)
+				{
+					c.ListBooks();
+				}
+				else if (userSelection == 2)
+				{
+					c.AddBook(Program.CreateBook());
+				}
+
+                userSelection = GetValidUserInput();
             }
-            
 
 
-            // make sure to add a defensive mechanism against the entry of the user
-            DisplayMenu();
-            string Selection = Console.ReadLine();
-            
-            int Choice = Convert.ToInt32(Selection);
 
-            //bool result = Int32.TryParse(Selection, out Choice);
-            
-            
-            while(Choice!=3)
-            {
-                if(Choice==1)
-                {
-                    c.ListBooks();
-
-                }
-                else if(Choice==2)
-                {
-                    Console.WriteLine("Please enter an author");
-                    string UserAuthor = Console.ReadLine();
-                    Console.WriteLine("Please enter an title");
-                    string UserTitle = Console.ReadLine();
-                    Book NewBook = new Book(UserAuthor, UserTitle);
-                    c.AddBook(NewBook);
-                }
-
-            }
-            
-            {
-                
-            }
 
         }
+
+        /// <summary>
+        /// Prompts the user for an author and title
+        /// Uses the user's input to create a new Book object
+        /// </summary>
+        private static Book CreateBook()
+        {
+            // clear the console
+            Console.Clear();
+
+			Console.WriteLine("Please enter an author");
+	        string UserAuthor = Console.ReadLine();
+	        Console.WriteLine("Please enter an title");
+	        string UserTitle = Console.ReadLine();
+	        return new Book(UserAuthor, UserTitle);
+		}
+
+        /// <summary>
+        /// Valid selections are the numbers 1, 2, or 3
+        /// User will be prompted until a valid input is received
+        /// </summary>
+        /// <returns>The valid user input.</returns>
+        private static int GetValidUserInput()
+        {
+            // Clear console
+            Console.Clear();
+
+            // Variable to represent the user's selection
+            int Choice = 0;
+
+            do
+            {
+                // display menu
+                DisplayMenu();
+
+                // Process and validate user's selection
+                string Selection = Console.ReadLine();
+                bool IsUserInputValid = Int32.TryParse(Selection, out Choice);
+
+                // If user enters invalid input, display warning && re-prompt
+                if (!IsUserInputValid || Choice > 3 || Choice < 1)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Please enter a valid number!\n");
+                }
+
+            }
+            while (Choice <= 0 || Choice > 3);
+
+            return Choice;
+        }
+
+        /// <summary>
+        /// Displays a menu with from which a user can make a selection
+        /// Valid inputs are 1, 2, and 3
+        /// </summary>
         public static void DisplayMenu()
         {
             Console.WriteLine("Please choose an option");
@@ -65,13 +106,14 @@ namespace LibraryCardCatalog
             Console.WriteLine("2. Add a book");
             Console.WriteLine("3. Save and exit");
         }
-        public static void WriteXML(string path, CardCatalog c)
+
+        public static void WriteXML(string path, List<Book> listOfBooks)
         {
-            
-            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(CardCatalog));
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<Book>));
             System.IO.FileStream file = System.IO.File.Create(path);
-            writer.Serialize(file, c);
+            writer.Serialize(file, listOfBooks);
             file.Close();
+
         }
     }
 }
