@@ -23,7 +23,7 @@ namespace LibraryCardCatalog
         }
         public Book(string author, string title)
         {
-            this.Title = title;
+            this.Title = title.ToUpper();
             this.Author = author;
         }
     }

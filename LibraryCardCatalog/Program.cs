@@ -37,7 +37,7 @@ namespace LibraryCardCatalog
 				}
 				else if (userSelection == 2)
 				{
-					c.AddBook(Program.CreateBook());
+					c.AddBook(c.CreateBook());
 				}
 
                 userSelection = GetValidUserInput();
@@ -50,21 +50,7 @@ namespace LibraryCardCatalog
 
         }
 
-        /// <summary>
-        /// Prompts the user for an author and title
-        /// Uses the user's input to create a new Book object
-        /// </summary>
-        private static Book CreateBook()
-        {
-            // clear the console
-            Console.Clear();
 
-			Console.WriteLine("Please enter an author");
-	        string UserAuthor = Console.ReadLine();
-	        Console.WriteLine("Please enter an title");
-	        string UserTitle = Console.ReadLine();
-	        return new Book(UserAuthor, UserTitle);
-		}
 
         /// <summary>
         /// Valid selections are the numbers 1, 2, or 3
@@ -128,10 +114,18 @@ namespace LibraryCardCatalog
         {
             FileStream stream = File.Open(path, FileMode.Open);
             BinaryFormatter formatter = new BinaryFormatter();
-            CardCatalog c = (CardCatalog)formatter.Deserialize(stream);
-            stream.Close();
+            try
+            {
+				CardCatalog c = (CardCatalog)formatter.Deserialize(stream);
+				stream.Close();
+                return c;
+            }
+            catch(SerializationException e)
+            {
+                Console.WriteLine(e.Message);
+                return new CardCatalog(path);
+            }
 
-            return c;
         }
     }
 }
