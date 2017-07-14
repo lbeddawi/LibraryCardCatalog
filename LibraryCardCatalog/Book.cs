@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 
 namespace LibraryCardCatalog
 {
+    [Serializable()]
     public class Book
     {
         public string Title

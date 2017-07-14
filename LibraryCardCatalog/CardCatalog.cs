@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 
 namespace LibraryCardCatalog
 {
+    [Serializable()]
     public class CardCatalog
     {
         private string _fileName;
@@ -48,7 +49,7 @@ namespace LibraryCardCatalog
 
         public void Save ()
         {
-            Program.WriteXML(_fileName,this.Books);
+            Program.Serialize(_fileName,this);
         }
     }
 }

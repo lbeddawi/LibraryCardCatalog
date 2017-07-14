@@ -17,8 +17,12 @@ namespace LibraryCardCatalog
             Console.WriteLine("Please enter a file name");
             string FileName = Console.ReadLine();
 
-            // initialize new CardCatalog using user's input
-            CardCatalog c = new CardCatalog(FileName);
+            // if FileName exists, we must De-Serialize it
+            // That is, create a new CardCatalog object
+            // If it doesn't exist, then we proceed as usual
+            // and save to that file once the user selects the Save option
+
+            CardCatalog c = (File.Exists(FileName)) ? Program.Deserialize(FileName) : new CardCatalog(FileName);
 
             // display menu and process user input
             int userSelection = GetValidUserInput();
@@ -39,8 +43,10 @@ namespace LibraryCardCatalog
                 userSelection = GetValidUserInput();
             }
 
-
-
+            if (userSelection == 3)
+            {
+                c.Save();
+            }
 
         }
 
@@ -107,13 +113,25 @@ namespace LibraryCardCatalog
             Console.WriteLine("3. Save and exit");
         }
 
-        public static void WriteXML(string path, List<Book> listOfBooks)
+        //Link to relevant MSDN documenation
+		//https://docs.microsoft.com/en-us/dotnet/api/system.serializableattribute?view=netframework-4.7
+		public static void Serialize(string path, CardCatalog c)
         {
-            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<Book>));
-            System.IO.FileStream file = System.IO.File.Create(path);
-            writer.Serialize(file, listOfBooks);
-            file.Close();
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = File.Create(path);
+            formatter.Serialize(stream, c);
+            stream.Close();
 
+        }
+
+        public static CardCatalog Deserialize(string path)
+        {
+            FileStream stream = File.Open(path, FileMode.Open);
+            BinaryFormatter formatter = new BinaryFormatter();
+            CardCatalog c = (CardCatalog)formatter.Deserialize(stream);
+            stream.Close();
+
+            return c;
         }
     }
 }
