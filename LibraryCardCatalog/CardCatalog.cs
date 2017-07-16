@@ -29,8 +29,7 @@ namespace LibraryCardCatalog
 
             if (Books.Count == 0)
             {
-                Console.WriteLine("There are no books in this catalog.\n" +
-                                  "Please add some books!");
+                Console.WriteLine("There are no books in this catalog.\n");
             }
             else
             {
@@ -60,19 +59,38 @@ namespace LibraryCardCatalog
         }
 
 		/// <summary>
-		/// Prompts the user for an author and title
-		/// Uses the user's input to create a new Book object
+		/// Prompts the user for an author and title.
+		/// Uses the user's input to create a new Book object.
+        /// Verifies that Author and Title fields are not blank
 		/// </summary>
 		public Book CreateBook()
 		{
-			// clear the console
-			Console.Clear();
+            string UserAuthor, UserTitle;
+            Console.Clear();
+            do
+            {
+                Console.WriteLine("Please enter an author");
+                UserAuthor = Console.ReadLine();
+                if (UserAuthor == "")
+                {
+					Console.Clear();
+                    Console.WriteLine("Author cannot be blank.\n");
+                }
+            }
+            while (UserAuthor == "");
 
-			Console.WriteLine("Please enter an author");
-			string UserAuthor = Console.ReadLine();
-
-			Console.WriteLine("Please enter an title");
-			string UserTitle = Console.ReadLine();
+            do
+            {
+                Console.WriteLine("Please enter an title");
+                UserTitle = Console.ReadLine();
+                if (UserTitle == "")
+                {
+                    Console.Clear();
+                    Console.WriteLine("Title cannot be blank.\n");
+                }
+            }
+            while (UserTitle == "");
+			
 			return new Book(UserAuthor, UserTitle);
 		}
 
@@ -82,12 +100,12 @@ namespace LibraryCardCatalog
         }
 
         /// <summary>
-        /// Requires user to press a key before proceeding
+        /// Requires user to press Enter before proceeding
         /// Used after listing books and adding books
         /// </summary>
         public void PauseMessage()
         {
-			Console.WriteLine("\nPress any key to go back to the menu:");
+			Console.WriteLine("\nPress Enter to go back to the menu:");
 			Console.ReadLine();
         }
     }

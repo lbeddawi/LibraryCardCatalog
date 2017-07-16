@@ -14,44 +14,60 @@ namespace LibraryCardCatalog
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to the Library Card Catalog!");
+
             // Prompt user for filename
-            Console.WriteLine("Please enter a new or existing file name:");
-            string FileName = Console.ReadLine();
+            // Re-prompt if user doesn't enter a valid alphanumeric string
+            string FileName;
+            do
+            {
+                Console.WriteLine("Please enter a new or existing file name:");
+                FileName = Console.ReadLine();
+                if (!System.Text.RegularExpressions.Regex.IsMatch(FileName, @"^[a-zA-Z0-9]+$"))
+                {
+					Console.Clear();
+                    Console.WriteLine("You must specify a file name to continue.\n" + 
+                                     "File name can only contain letters and numbers.\n");
+                }
+            }
+            while (!System.Text.RegularExpressions.Regex.IsMatch(FileName, @"^[a-zA-Z0-9]+$"));
 
             // if FileName exists, we must De-Serialize it
             // That is, create a new CardCatalog object
             // If it doesn't exist, then we proceed as usual
             // and save to that file once the user selects the Save option
 
-            CardCatalog c = (File.Exists(FileName)) ? Program.Deserialize(FileName) : new CardCatalog(FileName);
+            CardCatalog c = (File.Exists(FileName))
+                            ? Program.Deserialize(FileName)
+                            : new CardCatalog(FileName);
+            
+            RouteUserRequest(c, GetValidUserInput());
+        }
 
-            // display menu and process user input
-            int userSelection = GetValidUserInput();
-
-
-
+        /// <summary>
+        /// Reads the user's selection and calls the appropriate CardCatalog action
+        /// </summary>
+        /// <param name="c">current CardCatalog object</param>
+        /// <param name="userSelection">User's menu choice (could be 1, 2, or 3.</param>
+        private static void RouteUserRequest(CardCatalog c, int userSelection)
+        {
             while (userSelection != 3)
             {
-				if (userSelection == 1)
-				{
-					c.ListBooks();
-				}
-				else if (userSelection == 2)
-				{
-					c.AddBook(c.CreateBook());
-				}
+                if (userSelection == 1)
+                {
+                    c.ListBooks();
+                }
+                else if (userSelection == 2)
+                {
+                    c.AddBook(c.CreateBook());
+                }
 
                 userSelection = GetValidUserInput();
             }
-
             if (userSelection == 3)
             {
                 c.Save();
             }
-
         }
-
-
 
         /// <summary>
         /// Valid selections are the numbers 1, 2, or 3
@@ -89,7 +105,7 @@ namespace LibraryCardCatalog
         }
 
         /// <summary>
-        /// Displays a menu with from which a user can make a selection
+        /// Displays a menu with from which a user can make a selection.
         /// Valid inputs are 1, 2, and 3
         /// </summary>
         public static void DisplayMenu()
@@ -105,10 +121,17 @@ namespace LibraryCardCatalog
 		public static void Serialize(string path, CardCatalog c)
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = File.Create(path);
-            formatter.Serialize(stream, c);
-            stream.Close();
-
+            try
+            {
+				FileStream stream = File.Create(path);
+				formatter.Serialize(stream, c);
+				stream.Close();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return;
+            }
         }
 
         public static CardCatalog Deserialize(string path)
@@ -121,7 +144,7 @@ namespace LibraryCardCatalog
 				stream.Close();
                 return c;
             }
-            catch(SerializationException e)
+            catch(Exception e)
             {
                 Console.WriteLine(e.Message);
                 return new CardCatalog(path);
